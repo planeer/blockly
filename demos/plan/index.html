@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Demo: Generating JavaScript</title>
+  <script src="../../blockly_compressed.js"></script>
+  <script src="../../blocks_compressed.js"></script>
+  <script src="../../javascript_compressed.js"></script>
+  <script src="../../msg/js/en.js"></script>
+  <script src="plan.js"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Generating JavaScript</h1>
+
+  <p>This is a simple demo of generating code from blocks and running
+  the code in a sandboxed JavaScript interpreter.</p>
+
+  <p>&rarr; More info on <a href="https://developers.google.com/blockly/guides/configure/web/code-generators">Code Generators</a> and <a href="https://developers.google.com/blockly/guides/app-integration/running-javascript">Running JavaScript</a>.</p>
+
+  <p>
+    <button onclick="showCode()">Show JavaScript</button>
+    <button onclick="runCode()">Run JavaScript</button>
+  </p>
+
+  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+  <category name="Logic" colour="#5b80a5">
+    <block type="controls_if"></block>
+    <block type="logic_compare">
+      <field name="OP">EQ</field>
+    </block>
+    <block type="logic_operation">
+      <field name="OP">AND</field>
+    </block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean">
+      <field name="BOOL">TRUE</field>
+    </block>
+    <block type="logic_null"></block>
+    <block type="logic_ternary"></block>
+  </category>
+  <category name="Math" colour="#5b67a5">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+    <block type="math_arithmetic">
+      <field name="OP">ADD</field>
+      <value name="A">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_single">
+      <field name="OP">ROOT</field>
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">9</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_trig">
+      <field name="OP">SIN</field>
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">45</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_constant">
+      <field name="CONSTANT">PI</field>
+    </block>
+    <block type="math_number_property">
+      <mutation divisor_input="false"></mutation>
+      <field name="PROPERTY">EVEN</field>
+      <value name="NUMBER_TO_CHECK">
+        <shadow type="math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_round">
+      <field name="OP">ROUND</field>
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">3.1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_on_list">
+      <mutation op="SUM"></mutation>
+      <field name="OP">SUM</field>
+    </block>
+    <block type="math_modulo">
+      <value name="DIVIDEND">
+        <shadow type="math_number">
+          <field name="NUM">64</field>
+        </shadow>
+      </value>
+      <value name="DIVISOR">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_constrain">
+      <value name="VALUE">
+        <shadow type="math_number">
+          <field name="NUM">50</field>
+        </shadow>
+      </value>
+      <value name="LOW">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="HIGH">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_random_int">
+      <value name="FROM">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="TO">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_random_float"></block>
+  </category>
+  <category name="Text" colour="#5ba58c">
+    <block type="text">
+      <field name="TEXT"></field>
+    </block>
+    <block type="text_join">
+      <mutation items="2"></mutation>
+    </block>
+    <block type="text_append">
+      <field name="VAR" id="bP+E}mscFH65{BoBz@qo">item</field>
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT"></field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_length">
+      <value name="VALUE">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_isEmpty">
+      <value name="VALUE">
+        <shadow type="text">
+          <field name="TEXT"></field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_indexOf">
+      <field name="END">FIRST</field>
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR" id="E7;jmfcC_z}qsCDWh2vI">text</field>
+        </block>
+      </value>
+      <value name="FIND">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_charAt">
+      <mutation at="true"></mutation>
+      <field name="WHERE">FROM_START</field>
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR" id="E7;jmfcC_z}qsCDWh2vI">text</field>
+        </block>
+      </value>
+    </block>
+    <block type="text_getSubstring">
+      <mutation at1="true" at2="true"></mutation>
+      <field name="WHERE1">FROM_START</field>
+      <field name="WHERE2">FROM_START</field>
+      <value name="STRING">
+        <block type="variables_get">
+          <field name="VAR" id="E7;jmfcC_z}qsCDWh2vI">text</field>
+        </block>
+      </value>
+    </block>
+    <block type="text_changeCase">
+      <field name="CASE">UPPERCASE</field>
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_trim">
+      <field name="MODE">BOTH</field>
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_print">
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_prompt_ext">
+      <mutation type="TEXT"></mutation>
+      <field name="TYPE">TEXT</field>
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
+  <category name="Plan" colour="#5ba55b">
+    <block type="plan"></block>
+    <block type="global"></block>
+    <block type="variable"></block>
+    <block type="setup"></block>
+    <block type="pindefinition">
+      <field name="PINOPTIONS">INPUT</field>
+    </block>
+    <block type="serial"></block>
+    <block type="serialinit"></block>
+    <block type="print"></block>
+    <block type="prinln"></block>
+    <block type="serialreturnfunctions">
+      <field name="SERIALRETURNFUNCTIONS">READ</field>
+    </block>
+    <block type="servo"></block>
+    <block type="servoinit"></block>
+    <block type="servorotate"></block>
+    <block type="time">
+      <field name="TIMEOPTIONS">INIT</field>
+    </block>
+    <block type="display"></block>
+    <block type="displayinit"></block>
+    <block type="loop"></block>
+    <block type="pin"></block>
+    <block type="blink"></block>
+    <block type="setvalue">
+      <field name="NAME">ON</field>
+    </block>
+    <block type="while">
+      <field name="OPERATORS">EQUALS</field>
+    </block>
+    <block type="condition">
+      <field name="NAME">AND</field>
+      <field name="OPERATORS">EQUALS</field>
+    </block>
+    <block type="if">
+      <field name="OPERATORS">EQUALS</field>
+    </block>
+    <block type="elseif">
+      <field name="OPERATORS">EQUALS</field>
+    </block>
+  </category>
+</xml>
+
+  <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
+    <block type="plan">
+    <value name="GLOBAL">
+      <block type="global">
+        <statement name="VARIABLES">
+          <block type="variable">
+            <value name="NAME">
+              <block type="text">
+                <field name="TEXT">data</field>
+              </block>
+            </value>
+            <value name="VALUE">
+              <block type="text">
+                <field name="TEXT">0</field>
+              </block>
+            </value>
+            <next>
+              <block type="variable">
+                <value name="NAME">
+                  <block type="text">
+                    <field name="TEXT">connected</field>
+                  </block>
+                </value>
+                <value name="VALUE">
+                  <block type="logic_boolean">
+                    <field name="BOOL">FALSE</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variable">
+                    <value name="NAME">
+                      <block type="text">
+                        <field name="TEXT">led_builtin</field>
+                      </block>
+                    </value>
+                    <value name="VALUE">
+                      <block type="math_number">
+                        <field name="NUM">1</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </value>
+    <value name="SETUP">
+      <block type="setup">
+        <statement name="SETUPOPTIONS">
+          <block type="serial">
+            <value name="NAME">
+              <block type="serialinit">
+                <value name="NAME">
+                  <block type="math_number">
+                    <field name="NUM">9600</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="pindefinition">
+                <field name="PINOPTIONS">OUTPUT</field>
+                <value name="PIN">
+                  <block type="text">
+                    <field name="TEXT">led_builtin</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </value>
+    <value name="LOOP">
+      <block type="loop">
+        <statement name="LOOPOPTIONS">
+          <block type="if">
+            <field name="OPERATORS">GT</field>
+            <value name="FIRST">
+              <block type="serialreturnfunctions">
+                <field name="SERIALRETURNFUNCTIONS">AVAILABLE</field>
+              </block>
+            </value>
+            <value name="SECOND">
+              <block type="math_number">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <statement name="BODY">
+              <block type="if">
+                <field name="OPERATORS">EQUALS</field>
+                <value name="FIRST">
+                  <block type="text">
+                    <field name="TEXT">connected</field>
+                  </block>
+                </value>
+                <value name="SECOND">
+                  <block type="logic_boolean">
+                    <field name="BOOL">FALSE</field>
+                  </block>
+                </value>
+                <statement name="BODY">
+                  <block type="variable">
+                    <value name="NAME">
+                      <block type="text">
+                        <field name="TEXT">connected</field>
+                      </block>
+                    </value>
+                    <value name="VALUE">
+                      <block type="logic_boolean">
+                        <field name="BOOL">TRUE</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="serial">
+                        <value name="NAME">
+                          <block type="prinln">
+                            <statement name="NAME">
+                              <block type="text_print">
+                                <value name="TEXT">
+                                  <shadow type="text">
+                                    <field name="TEXT">Connection found</field>
+                                  </shadow>
+                                </value>
+                                <next>
+                                  <block type="pin">
+                                    <value name="PIN">
+                                      <block type="text">
+                                        <field name="TEXT">led_builtin</field>
+                                      </block>
+                                    </value>
+                                    <value name="PINOPTION">
+                                      <block type="blink">
+                                        <value name="NAME">
+                                          <block type="math_number">
+                                            <field name="NUM">5</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </next>
+                              </block>
+                            </statement>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <next>
+                  <block type="variable">
+                    <value name="NAME">
+                      <block type="text">
+                        <field name="TEXT">data</field>
+                      </block>
+                    </value>
+                    <value name="VALUE">
+                      <block type="serialreturnfunctions">
+                        <field name="SERIALRETURNFUNCTIONS">READ</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="serial">
+                        <value name="NAME">
+                          <block type="prinln">
+                            <statement name="NAME">
+                              <block type="text_print">
+                                <value name="TEXT">
+                                  <shadow type="text">
+                                    <field name="TEXT">data</field>
+                                  </shadow>
+                                </value>
+                              </block>
+                            </statement>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="if">
+                            <field name="OPERATORS">EQUALS</field>
+                            <value name="FIRST">
+                              <block type="text">
+                                <field name="TEXT">data</field>
+                              </block>
+                            </value>
+                            <value name="SECOND">
+                              <block type="text">
+                                <field name="TEXT">1</field>
+                              </block>
+                            </value>
+                            <statement name="BODY">
+                              <block type="pin">
+                                <value name="PIN">
+                                  <block type="text">
+                                    <field name="TEXT">led_builtin</field>
+                                  </block>
+                                </value>
+                                <value name="PINOPTION">
+                                  <block type="setvalue">
+                                    <field name="NAME">ON</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </statement>
+                            <statement name="ELSEIFS">
+                              <block type="elseif">
+                                <field name="OPERATORS">EQUALS</field>
+                                <value name="FIRST">
+                                  <block type="text">
+                                    <field name="TEXT">data</field>
+                                  </block>
+                                </value>
+                                <value name="SECOND">
+                                  <block type="text">
+                                    <field name="TEXT">0</field>
+                                  </block>
+                                </value>
+                                <statement name="BODY">
+                                  <block type="pin">
+                                    <value name="PIN">
+                                      <block type="text">
+                                        <field name="TEXT">led_builtin</field>
+                                      </block>
+                                    </value>
+                                    <value name="PINOPTION">
+                                      <block type="setvalue">
+                                        <field name="NAME">OFF</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </statement>
+                              </block>
+                            </statement>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="if">
+                <field name="OPERATORS">EQUALS</field>
+                <value name="FIRST">
+                  <block type="text">
+                    <field name="TEXT">connected</field>
+                  </block>
+                </value>
+                <value name="SECOND">
+                  <block type="logic_boolean">
+                    <field name="BOOL">TRUE</field>
+                  </block>
+                </value>
+                <statement name="BODY">
+                  <block type="serial">
+                    <value name="NAME">
+                      <block type="prinln">
+                        <statement name="NAME">
+                          <block type="text_print">
+                            <value name="TEXT">
+                              <shadow type="text">
+                                <field name="TEXT">Connection lost</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </statement>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="pin">
+                        <value name="PIN">
+                          <block type="text">
+                            <field name="TEXT">led_builtin</field>
+                          </block>
+                        </value>
+                        <value name="PINOPTION">
+                          <block type="blink">
+                            <value name="NAME">
+                              <block type="math_number">
+                                <field name="NUM">5</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <next>
+                  <block type="variable">
+                    <value name="NAME">
+                      <block type="text">
+                        <field name="TEXT">connected</field>
+                      </block>
+                    </value>
+                    <value name="VALUE">
+                      <block type="logic_boolean">
+                        <field name="BOOL">FALSE</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </statement>
+          </block>
+        </statement>
+      </block>
+    </value>
+  </block>
+  </xml>
+
+  <script>
+    var options = { 
+      toolbox : toolbox, 
+      collapse : true, 
+      comments : true, 
+      disable : true, 
+      maxBlocks : Infinity, 
+      trashcan : true, 
+      horizontalLayout : false, 
+      toolboxPosition : 'start', 
+      css : true, 
+      media : 'https://blockly-demo.appspot.com/static/media/', 
+      rtl : false, 
+      scrollbars : true, 
+      sounds : true, 
+      oneBasedIndex : true, 
+      zoom : {
+        controls : true, 
+        wheel : true, 
+        startScale : 1, 
+        maxScale : 3, 
+        minScale : 0.3, 
+        scaleSpeed : 1.2
+      }
+    };
+
+    /* Inject your workspace */ 
+    var workspace = Blockly.inject('blocklyDiv', options);
+
+    /* Load Workspace Blocks from XML to workspace. Remove all code below if no blocks to load */
+    var workspaceBlocks = document.getElementById("startBlocks"); 
+
+    /* Load blocks to workspace. */
+    Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);                           
+
+    function showCode() {
+      // Generate JavaScript code and display it.
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      var code = Blockly.JavaScript.workspaceToCode(workspace);
+      alert(code);
+    }
+
+    function runCode() {
+      // Generate JavaScript code and run it.
+      window.LoopTrap = 1000;
+      Blockly.JavaScript.INFINITE_LOOP_TRAP =
+          'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
+      var code = Blockly.JavaScript.workspaceToCode(workspace);
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      try {
+        eval(code);
+      } catch (e) {
+        alert(e);
+      }
+    }
+  </script>
+
+</body>
+</html>
