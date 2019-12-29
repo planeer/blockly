@@ -159,6 +159,10 @@ Blockly.Blocks['plan'] = {
       this.appendDummyInput()
           .appendField("SERVO INIT");
       this.appendValueInput("NAME")
+          .setCheck("String");
+      this.appendDummyInput()
+          .appendField("ON PIN");
+      this.appendValueInput("PIN")
           .setCheck(["Number", "String"]);
       this.setInputsInline(true);
       this.setOutput(true, "SERVOOPTIONS");
@@ -383,94 +387,76 @@ Blockly.JavaScript['plan'] = function(block) {
     var value_global = Blockly.JavaScript.valueToCode(block, 'GLOBAL', Blockly.JavaScript.ORDER_ATOMIC);
     var value_setup = Blockly.JavaScript.valueToCode(block, 'SETUP', Blockly.JavaScript.ORDER_ATOMIC);
     var value_loop = Blockly.JavaScript.valueToCode(block, 'LOOP', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = 'GLOBAL {' + value_global.slice(1, -1) + '}\nSETUP {' + value_setup.slice(1, -1) + '}\nLOOP {' + value_loop.slice(1, -1) + '}';
     return code;
   };
   
   Blockly.JavaScript['global'] = function(block) {
     var statements_variables = Blockly.JavaScript.statementToCode(block, 'VARIABLES');
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var code = "\n" + statements_variables;
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
   Blockly.JavaScript['variable'] = function(block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
     var value_value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = value_name + '=' + value_value + '\n';
     return code;
   };
   
   Blockly.JavaScript['setup'] = function(block) {
     var statements_setupoptions = Blockly.JavaScript.statementToCode(block, 'SETUPOPTIONS');
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var code = '\n' + statements_setupoptions;
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
   Blockly.JavaScript['pindefinition'] = function(block) {
     var dropdown_pinoptions = block.getFieldValue('PINOPTIONS');
     var value_pin = Blockly.JavaScript.valueToCode(block, 'PIN', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = value_pin + ' ' + dropdown_pinoptions + '\n';
     return code;
   };
   
   Blockly.JavaScript['serial'] = function(block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = 'SERIAL ' + value_name.slice(1, -1);
     return code;
   };
   
   Blockly.JavaScript['serialinit'] = function(block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var code = value_name + '\n';
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
   Blockly.JavaScript['print'] = function(block) {
     var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var code = 'print ' + statements_name;
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
   Blockly.JavaScript['prinln'] = function(block) {
     var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var code = 'println ' + statements_name;
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
   Blockly.JavaScript['serialreturnfunctions'] = function(block) {
     var dropdown_serialreturnfunctions = block.getFieldValue('SERIALRETURNFUNCTIONS');
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var code = 'SERIAL ' + dropdown_serialreturnfunctions;
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
   Blockly.JavaScript['servo'] = function(block) {
     var value_servooptions = Blockly.JavaScript.valueToCode(block, 'SERVOOPTIONS', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = 'SERVO ' + value_servooptions;
     return code;
   };
   
   Blockly.JavaScript['servoinit'] = function(block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var value_pin = Blockly.JavaScript.valueToCode(block, 'PIN', Blockly.JavaScript.ORDER_ATOMIC);
+    var code = value_name + ' ' + value_pin;
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
@@ -478,64 +464,51 @@ Blockly.JavaScript['plan'] = function(block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
     var value_angle1 = Blockly.JavaScript.valueToCode(block, 'ANGLE1', Blockly.JavaScript.ORDER_ATOMIC);
     var value_angle2 = Blockly.JavaScript.valueToCode(block, 'ANGLE2', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var code = ' rotate' + value_name + ' ' + value_angle1 + ' ' + value_angle2;
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
   Blockly.JavaScript['time'] = function(block) {
     var dropdown_timeoptions = block.getFieldValue('TIMEOPTIONS');
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = 'TIME ' + dropdown_timeoptions;
     return code;
   };
   
   Blockly.JavaScript['display'] = function(block) {
     var value_displayoption = Blockly.JavaScript.valueToCode(block, 'DISPLAYOPTION', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = 'DISPLAY ' + value_displayoption;
     return code;
   };
   
   Blockly.JavaScript['displayinit'] = function(block) {
     var value_width = Blockly.JavaScript.valueToCode(block, 'WIDTH', Blockly.JavaScript.ORDER_ATOMIC);
     var value_height = Blockly.JavaScript.valueToCode(block, 'HEIGHT', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var code = value_width + ' ' + value_height;
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
   Blockly.JavaScript['loop'] = function(block) {
     var statements_loopoptions = Blockly.JavaScript.statementToCode(block, 'LOOPOPTIONS');
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var code = '\n' + statements_loopoptions;
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
   Blockly.JavaScript['pin'] = function(block) {
     var value_pin = Blockly.JavaScript.valueToCode(block, 'PIN', Blockly.JavaScript.ORDER_ATOMIC);
     var value_pinoption = Blockly.JavaScript.valueToCode(block, 'PINOPTION', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = value_pin + ' ' + value_pinoption.slice(1, -1);
     return code;
   };
   
   Blockly.JavaScript['blink'] = function(block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var code = ' blink ' + value_name;
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
   Blockly.JavaScript['setvalue'] = function(block) {
     var dropdown_name = block.getFieldValue('NAME');
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...';
-    // TODO: Change ORDER_NONE to the correct strength.
+    var code = dropdown_name;
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
   
@@ -545,8 +518,7 @@ Blockly.JavaScript['plan'] = function(block) {
     var value_second = Blockly.JavaScript.valueToCode(block, 'SECOND', Blockly.JavaScript.ORDER_ATOMIC);
     var statements_conditions = Blockly.JavaScript.statementToCode(block, 'CONDITIONS');
     var statements_body = Blockly.JavaScript.statementToCode(block, 'BODY');
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = 'while ' + value_first + ' ' + dropdown_operators + ' ' + value_second + ' ' + statements_conditions + '{\n' + statements_body + '\n}\n';
     return code;
   };
   
@@ -555,8 +527,7 @@ Blockly.JavaScript['plan'] = function(block) {
     var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
     var dropdown_operators = block.getFieldValue('OPERATORS');
     var value_second = Blockly.JavaScript.valueToCode(block, 'SECOND', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = dropdown_name + ' ' + value_name + ' ' + dropdown_operators + ' ' + value_second;
     return code;
   };
   
@@ -568,8 +539,7 @@ Blockly.JavaScript['plan'] = function(block) {
     var statements_body = Blockly.JavaScript.statementToCode(block, 'BODY');
     var statements_elseifs = Blockly.JavaScript.statementToCode(block, 'ELSEIFS');
     var statements_else = Blockly.JavaScript.statementToCode(block, 'ELSE');
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = 'if ' + value_first + ' ' + dropdown_operators + ' ' + value_second + ' ' + statements_conditions + '{\n' + statements_body + '\n} ' + statements_elseifs + 'else {\n' + statements_else + '\n}\n';
     return code;
   };
   
@@ -579,7 +549,6 @@ Blockly.JavaScript['plan'] = function(block) {
     var value_second = Blockly.JavaScript.valueToCode(block, 'SECOND', Blockly.JavaScript.ORDER_ATOMIC);
     var statements_conditions = Blockly.JavaScript.statementToCode(block, 'CONDITIONS');
     var statements_body = Blockly.JavaScript.statementToCode(block, 'BODY');
-    // TODO: Assemble JavaScript into code variable.
-    var code = '...;\n';
+    var code = 'elif ' + value_first + ' ' + dropdown_operators + ' ' + value_second + ' ' + statements_conditions + '{\n' + statements_body + '\n} ';
     return code;
   };
